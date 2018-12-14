@@ -1,0 +1,134 @@
+angular 
+
+component structure
+    imports, mush have component imported
+    @component
+        selector
+        templateUrl - link za html 
+        styleUrls - obicno lista linkova za css 
+    
+    component logic (class)
+
+    using component selector
+        <selectorName></selectorName> in htm
+
+    ngOnInit - kad se pokrene component se izvrti taj dio koda
+
+service structure 
+    must have injectable imported 
+    if used in component, must be imported
+
+
+terminal commands 
+    ng generate component ( ng g c )
+        - stvore se novi fileovi za component
+        - updatea se app.module.ts  - doda se import za taj component
+                                    - doda se deklarator za taj component u @NgModule
+
+    ng generate service ( ng g s ) 
+        - stvori service 
+
+    ng build 
+        --prod za production
+    
+html commands 
+    <a routerLink="/about"> About </a> 
+        - umjesto href ide routerLink
+
+angular functions
+    import 
+        import component example 
+            import { HomeComponent } from './home/home.component'
+        import module example  (app.module.ts)
+            import { HttpClientModule } from '@angular/common/http'
+            i dodati ga na imports ispod
+
+    interpolation
+        - {{ propertyName }} - pokazuje propertyName iz logike tog componenta
+
+    routing
+        -app-routing.module.ts 
+
+        add routes in const routes: Routes 
+        routes are object 
+        example route - { path: 'about', component: AboutComponent } - ako se zeli koristiti, component se mora importati
+        moguce dodati url parameters
+    
+    event binding
+        example 
+            <button (click)="firstClick()"> Click Me </button>
+            calls the firstClick functions in component logic 
+
+            other events- focus blur submit scroll cut copy paste keydown keypress keyup mouseenter mousedown mouseup click dblclick drag dragover drop
+    
+    class binding 
+        example
+            <h1 [class.gray] = 'h1Style' >Home</h1>
+                class gray will be active only if the h1Style bool in component logic is true 
+
+    multiple class binding 
+        example
+            <h1 [ngClass] = "{ 'gray': h1Style, 'red':!h1Style }" >Home</h1>
+            
+    style binding 
+        example
+            <h1 [style.color]= "h1Style ? 'gray': 'black'" >Home</h1>
+                ako je h1Style true (?) pokazuje uzima gray, else black
+
+    multiple style binding 
+        example 
+            <h1 [ngStyle] = "{ 'color': h1Style ? 'gray': 'yellow',
+                               'background-color': h1Style ? 'yellow': 'grey' }"> Home</h1>
+
+    Dependency Injection
+        example (in component)
+            constructor(private data: DataService) { }
+            ...
+            this.data.firstClick();
+        Stvara instance servicea i preko te varijable se pristupa podacima s istog 
+    
+    subscribing 
+        example 
+                this.data.getUsers().subscribe(data => { this.users = data; })
+            data je instance servicea, getUseres je puno returnanih podataka
+            subscribe(data => {}) - kada se data promjeni, izvrti kod
+    *nfIF 
+        <ul *ngIf="users"> - ako je users true, znaci ako ima sadrzaja
+    
+    *ngFor 
+        <li *ngFor="let a of users.data">
+            {{a.id}} {{a.name}} itd 
+
+    Forms 
+        messageForm: FormGroup; - forma
+
+        constructor(private formBuilder: FormBuilder) {  -- formBuilder - kontrola forme
+            this.messageForm = this.formBuilder.group({
+                name: ['', Validators.required],
+                message: ['', Validators.required]
+            })
+        }
+        onSubmit() {
+            this.submitted = true;
+
+            if ( this.messageForm.invalid) {
+                return;
+            }
+            this.success = true;
+        }
+
+        <form [formGroup] = "messageForm" (ngSubmit) = "onSubmit()">
+            <input type="text" formControlName="name">
+                    <div *ngIf = "submitted && messageForm.controls.name.errors" class="error"> - provjera dal ima error
+                        <div *ngIf = "messageForm.controls.name.errors.required">Name Required</div> - za specificni error 
+                    </div>
+        
+
+modulez
+    import { HttpClientModule } from '@angular/common/http' in app.modules
+    import { HttpClient } from '@angular/common/http' in components
+    
+    ReactiveFormsModule from forms app.modules
+    FormBuilder, FormGroup, Validators in component
+
+            
